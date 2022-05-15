@@ -270,10 +270,6 @@ PRODUCT_PACKAGES += \
     init.verity.rc \
     ueventd.qcom.rc
 
-# IRQ
-PRODUCT_COPY_FILES += \
-    $(DEVICE_PATH)/configs/msm_irqbalance.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance.conf
-
 # IRSC
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/sec_config:$(TARGET_COPY_OUT_VENDOR)/etc/sec_config
@@ -400,7 +396,8 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power-service.xiaomi_sdm660-libperfmgr
+    android.hardware.power-service.xiaomi_sdm660-libperfmgr \
+    vendor.qti.hardware.perf@2.2.vendor
 
 # Powerhint
     PRODUCT_COPY_FILES += \
@@ -440,7 +437,6 @@ PRODUCT_PACKAGES += \
 
 # QTI Performance
 PRODUCT_COPY_FILES += \
-    $(DEVICE_PATH)/configs/perf/perf-profile0.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile0.conf \
     $(DEVICE_PATH)/configs/perf/perfconfigstore.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perfconfigstore.xml
 
 # Ramdisk
