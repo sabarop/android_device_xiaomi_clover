@@ -146,6 +146,8 @@ PRODUCT_PACKAGES += \
     hwcomposer.sdm660 \
     memtrack.sdm660 \
     libdisplayconfig \
+    libqdMetaData.system \
+    libqdMetaData.vendor \
     vendor.display.config@1.0 \
     vendor.display.config@1.0.vendor \
     vendor.display.config@2.0 \
@@ -179,7 +181,9 @@ PRODUCT_PACKAGES += \
 # fwk-detect
 PRODUCT_PACKAGES += \
     libqti_vndfwk_detect \
-    libqti_vndfwk_detect.vendor
+    libqti_vndfwk_detect.vendor \
+    libvndfwk_detect_jni.qti \
+    libvndfwk_detect_jni.qti.vendor
 
 # GMS
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
@@ -237,9 +241,12 @@ PRODUCT_PACKAGES += \
     android.hardware.neuralnetworks@1.3.vendor \
     android.hardware.keymaster@3.0.vendor \
     android.hardware.keymaster@4.0.vendor \
-    android.hardware.radio.config@1.3.vendor \
-    android.hardware.radio@1.6.vendor \
+    android.hardware.radio.config@1.2 \
+    android.hardware.radio.config@1.2.vendor \
+    android.hardware.radio@1.5 \
+    android.hardware.radio@1.5.vendor \
     android.hardware.radio.deprecated@1.0.vendor \
+    android.hardware.secure_element@1.2 \
     android.hardware.secure_element@1.2.vendor \
     android.system.net.netd@1.1.vendor \
     android.hardware.gnss@2.1.vendor
