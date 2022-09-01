@@ -226,6 +226,11 @@ persist.vendor.ssr.restart_level=ALL_ENABLE
 vendor.usb.diag.func.name=diag
 vendor.usb.use_ffs_mtp=0
 
+# USB
+vendor.usb.rmnet.func.name=rmnet_bam
+vendor.usb.rmnet.inst.name=rmnet
+vendor.usb.rndis.func.name=rndis_bam
+
 # WiFi
 wifi.aware.interface=wifi-aware0
 
