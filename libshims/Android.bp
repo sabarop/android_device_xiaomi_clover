@@ -12,3 +12,13 @@ cc_library_shared {
 
     proprietary: true,
 }
+
+cc_library_shared {
+    name: "libimsvt_shim",
+    srcs: ["imsvt_shim.cpp"],
+    shared_libs: [
+        "libui",
+        "libutils",
+    ],
+    system_ext_specific: true,
+}

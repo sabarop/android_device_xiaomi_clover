@@ -59,6 +59,12 @@ function blob_fixup() {
         "${PATCHELF}" --remove-needed "android.hidl.base@1.0.so" "${2}"
         ;;
 
+    system_ext/lib64/lib-imsvideocodec.so)
+        for LIBIMSVT_SHIM in $(grep -L "libimsvt_shim.so" "${2}"); do
+        "${PATCHELF}" --add-needed "libimsvt_shim.so" "${LIBIMSVT_SHIM}"
+        done
+        ;;
+
     vendor/lib/hw/camera.sdm660.so)
         for LIBCAMERA_SDM660_SHIM in $(grep -L "libcamera_sdm660_shim.so" "${2}"); do
         "${PATCHELF}" --add-needed "libcamera_sdm660_shim.so" "$LIBCAMERA_SDM660_SHIM"
