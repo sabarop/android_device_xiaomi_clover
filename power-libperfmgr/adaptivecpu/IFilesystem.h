@@ -1,5 +1,7 @@
+#pragma once
+
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +16,10 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <aidl/google/hardware/power/extension/pixel/BnPowerExt.h>
-#include <perfmgr/HintManager.h>
-
-#include <atomic>
+#include <chrono>
 #include <memory>
-#include <thread>
-
-#include "adaptivecpu/AdaptiveCpu.h"
+#include <ostream>
+#include <vector>
 
 namespace aidl {
 namespace google {
@@ -32,17 +28,17 @@ namespace power {
 namespace impl {
 namespace pixel {
 
-class PowerExt : public ::aidl::google::hardware::power::extension::pixel::BnPowerExt {
+// Abstracted so we can mock in tests.
+class IFilesystem {
   public:
-    PowerExt(std::shared_ptr<AdaptiveCpu> acpu)
-        : mAdaptiveCpu(acpu) {}
-    ndk::ScopedAStatus setMode(const std::string &mode, bool enabled) override;
-    ndk::ScopedAStatus isModeSupported(const std::string &mode, bool *_aidl_return) override;
-    ndk::ScopedAStatus setBoost(const std::string &boost, int32_t durationMs) override;
-    ndk::ScopedAStatus isBoostSupported(const std::string &boost, bool *_aidl_return) override;
-
-  private:
-    std::shared_ptr<AdaptiveCpu> mAdaptiveCpu;
+    virtual ~IFilesystem() {}
+    virtual bool ListDirectory(const std::string &path, std::vector<std::string> *result) const = 0;
+    virtual bool ReadFileStream(const std::string &path,
+                                std::unique_ptr<std::istream> *result) const = 0;
+    // Resets the file stream, so that the next read will read from the beginning.
+    // This function exists in IFilesystem rather than using istream::seekg directly. This is
+    // so we can mock this function in tests, allowing us to return different data on reset.
+    virtual bool ResetFileStream(const std::unique_ptr<std::istream> &fileStream) const = 0;
 };
 
 }  // namespace pixel
