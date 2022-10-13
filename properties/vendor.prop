@@ -1,3 +1,6 @@
+# Adoptable Storage
+ro.crypto.volume.options=aes-256-xts
+
 # ART
 pm.dexopt.ab-ota=speed-profile
 dalvik.vm.dex2oat64.enabled=true
@@ -12,8 +15,10 @@ dalvik.vm.image-dex2oat-threads=8
 
 # Audio
 af.fast_track_multiplier=1
+audio.chk.cal.us=0
 audio.deep_buffer.media=true
 audio.offload.video=true
+persist.vendor.audio.fluence.audiorec=true
 persist.vendor.audio.fluence.speaker=false
 persist.vendor.audio.fluence.voicecall=true
 persist.vendor.audio.fluence.voicerec=true
@@ -96,6 +101,9 @@ vendor.qcom.bluetooth.soc=cherokee
 ro.vendor.fm.use_audio_session=true
 
 # Camera
+persist.camera.HAL3.enabled=1
+persist.camera.preview.ubwc=0
+persist.camera.stats.test=5
 persist.vendor.camera.dual.isp.sync=0
 persist.vendor.camera.HAL3.enabled=1
 persist.vendor.camera.exif.make=Xiaomi
@@ -121,6 +129,7 @@ drm.service.enabled=true
 debug.gralloc.enable_fb_ubwc=1
 debug.sf.disable_client_composition_cache=1
 debug.sdm.support_writeback=0
+debug.vds.allow_hwc=0
 dev.pm.dyn_samplingrate=1
 ro.vendor.display.cabl=2
 vendor.display.disable_skip_validate=1
@@ -132,9 +141,6 @@ vendor.gralloc.disable_ahardware_buffer=1
 vendor.gralloc.enable_fb_ubwc=1
 video.disable.ubwc=1
 vendor.video.disable.ubwc=1
-
-# Fwk detect
-ro.vendor.qti.va_aosp.support=1
 
 # Fwk detect
 ro.vendor.qti.va_aosp.support=1
@@ -167,6 +173,7 @@ persist.rcs.supported=0
 persist.dbg.volte_avail_ovr=1
 persist.dbg.vt_avail_ovr=1
 persist.dbg.wfc_avail_ovr=1
+persist.radio.multisim.config=ssss
 persist.sys.fflag.override.settings_provider_model=false
 persist.vendor.radio.aosp_usr_pref_sel=true
 persist.vendor.radio.add_power_save=1

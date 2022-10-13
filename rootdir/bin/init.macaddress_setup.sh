@@ -1,6 +1,6 @@
 #! /vendor/bin/sh
 
-# Copyright (c) 2009-2016, The Linux Foundation. All rights reserved.
+# Copyright (c) 2013, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -9,7 +9,7 @@
 #     * Redistributions in binary form must reproduce the above copyright
 #       notice, this list of conditions and the following disclaimer in the
 #       documentation and/or other materials provided with the distribution.
-#     * Neither the name of The Linux Foundation nor
+#     * Neither the name of Linux Foundation nor
 #       the names of its contributors may be used to endorse or promote
 #       products derived from this software without specific prior written
 #       permission.
@@ -27,6 +27,49 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-if [ ! -f /data/system/users/0/settings_fingerprint.xml ]; then
-    rm -rf /mnt/vendor/persist/data/finger_*
+CLOVERMAC=/mnt/vendor/persist/wlan_mac.clover
+WLAN_MAC_BIN=/mnt/vendor/persist/wlan_mac.bin
+MACADDRESSBIN=/mnt/vendor/persist/wlan_bt/wlan.mac
+INTFSTR0="Intf0MacAddress="
+MAC0=000AF58989FF
+
+get_mac () {
+  if [ -f $MACADDRESSBIN ]; then
+    realMac=$(printf "%b"  | od -An -t x1 -w6 -N6  $MACADDRESSBIN | tr -d '\n ')
+  else
+    if [ -f $WLAN_MAC_BIN ]; then
+        checkMac=$(printf "%b"  | od -An -t x1 -w6 -N6  $CLOVERMAC | tr -d '\n ')
+        if [ $checkMac != $MAC0 ] && [ "${checkMac:0:2}" != "49" ]; then
+          realMac=$checkMac
+        fi
+    else
+        realMac=$MAC0
+    fi
+  fi
+}
+
+wlan_mac () {
+    wlanMac=$(head -n 1 $CLOVERMAC)
+    wlanMac=$(echo -e "${wlanMac//$INTFSTR0}")
+}
+
+write_mac () {
+        echo -e  "$INTFSTR0""$realMac" >$CLOVERMAC
+        echo -e  "END">>$CLOVERMAC
+        chown wifi $CLOVERMAC
+        chgrp wifi $CLOVERMAC
+}
+
+if [ -f $CLOVERMAC ]; then
+    get_mac
+    wlan_mac
+    if [ "${realMac:0:6}" == "${wlanMac:0:6}" ] && [ "${wlanMac:0:2}" != "49" ]; then
+        exit 1
+    else
+        get_mac
+        write_mac
+    fi
+else
+    get_mac
+    write_mac
 fi
