@@ -574,3 +574,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
    DeviceSettings
 
+
+# Qcom namepsaces
+QCOM_SOONG_NAMESPACE := \
+    hardware/qcom-caf/sdm660

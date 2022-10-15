@@ -54,3 +54,5 @@ PRODUCT_MODEL := Mi PAD 4 Plus
 PRODUCT_SYSTEM_NAME := clover
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
+
+DEVICE_MAINTAINER := traveler
