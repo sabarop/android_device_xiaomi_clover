@@ -1,5 +1,4 @@
 # Audio - from clover - OPM1.171019.019.V10.3.2.0.ODJCNX
-vendor/firmware/tas2557s_uCDSP_d9p.bin|38086f8716f7a37c9f345a5f19b948243b2ce379
 vendor/firmware/tas2557s_uCDSP.bin|38086f8716f7a37c9f345a5f19b948243b2ce379
 
 # Audio ACDB - from clover - OPM1.171019.019.V10.3.2.0.ODJCNXM
