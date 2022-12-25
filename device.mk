@@ -58,6 +58,10 @@ PRODUCT_PACKAGES += \
 DEVICE_PACKAGE_OVERLAYS += \
     $(DEVICE_PATH)/overlay
 
+PRODUCT_PACKAGES += \
+    CloverFrameworksOverlay \
+    CloverSystemUIOverlay
+
 # Partitions
 PRODUCT_PACKAGES += \
     e2fsck_ramdisk \
