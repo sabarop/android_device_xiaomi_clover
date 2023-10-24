@@ -49,6 +49,12 @@ BOARD_HAVE_QCOM_FM := false
 DEVICE_PACKAGE_OVERLAYS += \
     $(DEVICE_PATH)/overlay
 
+# Partitions
+PRODUCT_PACKAGES += \
+    e2fsck_ramdisk \
+    tune2fs_ramdisk \
+    resize2fs_ramdisk
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
