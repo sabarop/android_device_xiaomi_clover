@@ -363,34 +363,5 @@ vendor/lib64/hw/fingerprint.fpc.so:vendor/lib64/hw/fingerprint.fpc.default.so
 vendor/lib64/libqfp-service.so
 vendor/lib64/vendor.qti.hardware.fingerprint@1.0.so
 
-# Gatekeeper
-vendor/bin/hw/android.hardware.gatekeeper@1.0-service-qti
-vendor/etc/init/android.hardware.gatekeeper@1.0-service-qti.rc
-vendor/lib/hw/gatekeeper.sdm660.so
-vendor/lib/hw/android.hardware.gatekeeper@1.0-impl-qti.so
-vendor/lib64/hw/gatekeeper.sdm660.so
-vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl-qti.so
-
 # Keystore
-vendor/bin/hw/android.hardware.keymaster@3.0-service-qti
 vendor/etc/init/android.hardware.keymaster@3.0-service-qti.rc
-vendor/lib/hw/keystore.sdm660.so
-vendor/lib/hw/android.hardware.keymaster@3.0-impl-qti.so
-vendor/lib64/hw/keystore.sdm660.so
-vendor/lib64/hw/android.hardware.keymaster@3.0-impl-qti.so
-
-# Sensors - from LA.UM.8.2.r1-06700-sdm660.0
-vendor/lib/sensors.ssc.so|9276c8863dccd2cd13e0a29083e75648ab0c0e97
-vendor/lib64/sensors.ssc.so|da3e7b1722ea136bd76b716ddd2ec814ee3cc0b7
-
-# Thermal (Configs)
-vendor/etc/thermal-engine-battery.conf
-vendor/etc/thermal-engine-battery2.conf
-vendor/etc/thermal-engine-gameing.conf
-vendor/etc/thermal-engine-performance.conf
-vendor/etc/thermal-engine-map.conf
-vendor/etc/thermal-engine-default.conf
-vendor/etc/thermal-engine.conf
-
-# Wifi - from jasmine
-vendor/bin/cnss-daemon|a7b196d0c8204f6fbe445710e8d062d0c2d9b42f
