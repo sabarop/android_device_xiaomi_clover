@@ -26,11 +26,5 @@ persist.vendor.camera.perflock.enable=0
 persist.vendor.camera.preview.ubwc=0
 persist.vendor.camera.stats.test=5
 
-# Crypto
-ro.crypto.dm_default_key.options_format.version=2
-ro.crypto.volume.filenames_mode=aes-256-cts
-ro.crypto.volume.metadata.method=dm-default-key
-ro.crypto.volume.options=::v2
-
 # Ultra Sound
 vendor.audio.chk.cal.us=0
