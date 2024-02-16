@@ -27,7 +27,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     camera.sdm660 \
-    libstdc++.vendor
+    libstdc++_vendor
 
 # FM
 BOARD_HAVE_QCOM_FM := false
