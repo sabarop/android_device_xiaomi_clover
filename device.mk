@@ -31,6 +31,10 @@ PRODUCT_PACKAGES += \
     libmegface \
     libstdc++_vendor
 
+# Fingerprint
+PRODUCT_PACKAGES += \
+    com.fingerprints.extension@1.0.vendor
+
 # FM
 BOARD_HAVE_QCOM_FM := false
 
