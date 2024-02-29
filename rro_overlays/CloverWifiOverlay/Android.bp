@@ -1,5 +1,5 @@
 runtime_resource_overlay {
     name: "CloverWifiOverlay",
     theme: "CloverWifiOverlay",
-    product_specific: true
+    vendor: true
 }
