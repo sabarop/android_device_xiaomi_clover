@@ -22,7 +22,6 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
 
 # Boot animation
-TARGET_BOOTANIMATION_SIZE := 1080
 TARGET_SCREEN_HEIGHT := 1920
 TARGET_SCREEN_WIDTH := 1200
 
@@ -90,10 +89,3 @@ PRODUCT_PACKAGES += \
 
 # Vendor files
 $(call inherit-product, vendor/xiaomi/clover/clover-vendor.mk)
-
-# AOSP DEVICE
-PRODUCT_NAME := aosp_clover
-PRODUCT_DEVICE := clover
-PRODUCT_MODEL := Mi PAD 4 (AOSP)
-PRODUCT_BRAND := Xiaomi
-PRODUCT_MANUFACTURER := Xiaomi

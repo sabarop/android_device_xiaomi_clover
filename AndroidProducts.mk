@@ -23,4 +23,4 @@
 
 # inherit MI PAD 4 LineageOS device config
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_clover.mk
+    $(LOCAL_DIR)/aosp_clover.mk

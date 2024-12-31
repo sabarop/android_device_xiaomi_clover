@@ -21,8 +21,9 @@
 # definition file).
 #
 
-# Inherit some common LineageOS stuff
-$(call inherit-product, vendor/lineage/config/common_full_tablet.mk)
+# Inherit some common PixelOS stuff
+$(call inherit-product, vendor/aosp/config/common_full_tablet.mk)
+TARGET_BOOT_ANIMATION_RES := 1440
 
 # Inherit device configuration
 $(call inherit-product, device/xiaomi/clover/device.mk)
@@ -36,7 +37,7 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 # Device identifier
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MANUFACTURER := Xiaomi
-PRODUCT_NAME := lineage_clover
+PRODUCT_NAME := aosp_clover
 PRODUCT_CHARACTERISTICS := tablet
 PRODUCT_DEVICE := clover
 PRODUCT_MODEL := MI PAD 4
