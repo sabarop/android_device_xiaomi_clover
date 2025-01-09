@@ -154,16 +154,16 @@ ifneq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.4 4.9))
 endif
 
 LOCAL_HEADER_LIBRARIES := camera_common_headers
+LOCAL_HEADER_LIBRARIES += display_headers
 LOCAL_HEADER_LIBRARIES += media_plugin_headers
 LOCAL_HEADER_LIBRARIES += libandroid_sensor_headers
 LOCAL_HEADER_LIBRARIES += libcutils_headers
 LOCAL_HEADER_LIBRARIES += libsystem_headers
 LOCAL_HEADER_LIBRARIES += libhardware_headers
-LOCAL_HEADER_LIBRARIES += display_headers
 
 #HAL 1.0 Include paths
 LOCAL_C_INCLUDES += \
-        $(call project-path-for,qcom-camera)/QCamera2/HAL
+        $(DEVICE_PATH)/camera/QCamera2/HAL
 
 ifeq ($(TARGET_COMPILE_WITH_MSM_KERNEL),true)
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include

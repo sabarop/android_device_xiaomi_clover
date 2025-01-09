@@ -137,6 +137,10 @@ namespace qcamera {
 #define UBWC_COMP_RATIO 1.26
 #define PERF_CONFIG_PATH "/vendor/etc/camera/cameraconfig.txt"
 
+#define CTS_WA_HEIGHT_CHECK 3120
+#define CTS_WA_WIDTH_CHECK 4160
+#define CTS_WA_MINFRAMEDURATION 66666666
+
 // Whether to check for the GPU stride padding, or use the default
 //#define CHECK_GPU_PIXEL_ALIGNMENT
 
@@ -1547,7 +1551,7 @@ bool QCamera3HardwareInterface::isSupportChannelNeeded(
  *              none-zero failure code
  *
  *==========================================================================*/
-int32_t QCamera3HardwareInterface::getSensorOutputSize(cam_dimension_t &sensor_dim,
+int32_t QCamera3HardwareInterface::getSensorOutputSize(cam_sensor_config_t &sensor_dim,
         uint32_t cam_type)
 {
     int32_t rc = NO_ERROR;
@@ -2339,7 +2343,8 @@ int QCamera3HardwareInterface::configureStreamsPerfLocked(
     count = MIN(gCamCapability[mCameraId]->supported_is_types_cnt, count);
     for (size_t i = 0; i < count; i++) {
         if ((gCamCapability[mCameraId]->supported_is_types[i] == IS_TYPE_EIS_2_0) ||
-            (gCamCapability[mCameraId]->supported_is_types[i] == IS_TYPE_EIS_3_0)) {
+            (gCamCapability[mCameraId]->supported_is_types[i] == IS_TYPE_EIS_3_0) ||
+            (gCamCapability[mCameraId]->supported_is_types[i] == IS_TYPE_VENDOR_EIS)) {
             m_bEisSupported = true;
             break;
         }
@@ -2706,6 +2711,14 @@ int QCamera3HardwareInterface::configureStreamsPerfLocked(
     property_get("persist.vendor.camera.is_type", is_type_value, "0");
     m_bEis3PropertyEnabled = (atoi(is_type_value) == IS_TYPE_EIS_3_0);
 
+    /* get eis information for stream configuration */
+    cam_is_type_t isTypeVideo, isTypePreview;
+    isTypeVideo = static_cast<cam_is_type_t>(atoi(is_type_value));
+
+    property_get("persist.vendor.camera.is_type_preview", is_type_value, "4");
+    isTypePreview = static_cast<cam_is_type_t>(atoi(is_type_value));
+    LOGD("isTypeVideo: %d isTypePreview: %d", isTypeVideo, isTypePreview);
+
     //Create metadata channel and initialize it
     cam_feature_mask_t metadataFeatureMask = CAM_QCOM_FEATURE_NONE;
     setPAAFSupport(metadataFeatureMask, CAM_STREAM_TYPE_METADATA,
@@ -2863,9 +2876,12 @@ int QCamera3HardwareInterface::configureStreamsPerfLocked(
                         mStreamConfigInfo[index].postprocess_mask[stream_index] &=
                                 ~CAM_QCOM_FEATURE_CDS;
                     }
-                    if (m_bEis3PropertyEnabled /* hint for EIS 3 needed here */) {
+                    if (isTypeVideo == IS_TYPE_EIS_3_0 /* hint for EIS 3 needed here */) {
                         mStreamConfigInfo[index].postprocess_mask[stream_index] |=
                             CAM_QTI_FEATURE_PPEISCORE;
+                    } else if (isTypeVideo == IS_TYPE_VENDOR_EIS) {
+                        mStreamConfigInfo[index].postprocess_mask[stream_index] |=
+                            CAM_QTI_FEATURE_VENDOR_EIS;
                     }
                 } else {
                         mStreamConfigInfo[index].type[stream_index] =
@@ -2885,6 +2901,10 @@ int QCamera3HardwareInterface::configureStreamsPerfLocked(
                     padding_info.height_padding = CAM_PAD_TO_2;
                     previewSize.width = (int32_t)newStream->width;
                     previewSize.height = (int32_t)newStream->height;
+                    if (isTypePreview == IS_TYPE_VENDOR_EIS /* hint for VENDOR EIS needed here */) {
+                        mStreamConfigInfo[index].postprocess_mask[stream_index] |=
+                            CAM_QTI_FEATURE_VENDOR_EIS;
+                    }
                 }
                 if ((newStream->rotation == CAMERA3_STREAM_ROTATION_90) ||
                         (newStream->rotation == CAMERA3_STREAM_ROTATION_270)) {
@@ -3163,11 +3183,9 @@ int QCamera3HardwareInterface::configureStreamsPerfLocked(
                             channel->setUBWCEnabled(true);
                         }
                         newStream->max_buffers = channel->getNumBuffers();
-#if 0
                         if (isTypeVideo == IS_TYPE_VENDOR_EIS) {
                             newStream->max_buffers = MAX_VIDEO_VENDOR_EIS_BUFFERS;
                         }
-#endif
                         newStream->priv = channel;
                     }
                     break;
@@ -7060,6 +7078,9 @@ int QCamera3HardwareInterface::processCaptureRequest(
             if (setEis && eis3Supported && (isTypeVideo == IS_TYPE_EIS_3_0)) {
                 mMaxInFlightRequests = MAX_INFLIGHT_EIS_REQUESTS;
             }
+            else if (setEis && (isTypeVideo == IS_TYPE_VENDOR_EIS)) {
+                mMaxInFlightRequests = MAX_INFLIGHT_EIS_REQUESTS;
+            }
 
             // This DC info is required for setting the actual sync type instead of value
             // set in confgure streams
@@ -7241,9 +7262,10 @@ int QCamera3HardwareInterface::processCaptureRequest(
 
             // e.g. If we used video HDR in camcorder mode but are not using HDR in picture
             // mode, sensor HDR should be disabled here
-            if (!didSetSensorHdr)
+            if (!didSetSensorHdr) {
                 setSensorHDR(params, false, false);
-            mShouldSetSensorHdr = false;
+                mShouldSetSensorHdr = false;
+            }
 
             //TODO: validate the arguments, HSV scenemode should have only the
             //advertised fps ranges
@@ -7306,7 +7328,7 @@ int QCamera3HardwareInterface::processCaptureRequest(
                 }
             }
 
-            cam_dimension_t sensor_dim;
+            cam_sensor_config_t sensor_dim;
             memset(&sensor_dim, 0, sizeof(sensor_dim));
             if(config_index == CONFIG_INDEX_AUX)
             {
@@ -7336,7 +7358,7 @@ int QCamera3HardwareInterface::processCaptureRequest(
             perfLevel = predictFSM(FSM, &mStreamConfigInfo, &mSettingInfo[0], mSessionId);
 #endif
             if(isDualCamera()  && !IS_PP_TYPE_NONE) {
-                cam_dimension_t sensor_dim_aux;
+                cam_sensor_config_t sensor_dim_aux;
                 memset(&sensor_dim_aux, 0, sizeof(sensor_dim_aux));
                 rc = getSensorOutputSize(sensor_dim_aux, CAM_TYPE_AUX);
                 if (rc != NO_ERROR) {
@@ -8332,7 +8354,6 @@ no_error:
                     return BAD_VALUE;
                 }
             }
-#if 0
             if ((isTypePreview == IS_TYPE_VENDOR_EIS) &&
                (((1U << CAM_STREAM_TYPE_PREVIEW) == channel->getStreamTypeMask()))) {
                 //Trigger Perf Flush event to back-end
@@ -8343,7 +8364,6 @@ no_error:
                     return BAD_VALUE;
                 }
             }
-#endif
         }
     }
 
@@ -12118,7 +12138,8 @@ int QCamera3HardwareInterface::initStaticMetadata(uint32_t cameraId)
     count = MIN(gCamCapability[cameraId]->supported_is_types_cnt, count);
     for (size_t i = 0; i < count; i++) {
         if ((gCamCapability[cameraId]->supported_is_types[i] == IS_TYPE_EIS_2_0) ||
-            (gCamCapability[cameraId]->supported_is_types[i] == IS_TYPE_EIS_3_0)) {
+            (gCamCapability[cameraId]->supported_is_types[i] == IS_TYPE_EIS_3_0) ||
+            (gCamCapability[cameraId]->supported_is_types[i] == IS_TYPE_VENDOR_EIS)) {
             eisSupported = true;
             break;
         }
@@ -12324,6 +12345,14 @@ int QCamera3HardwareInterface::initStaticMetadata(uint32_t cameraId)
                 available_min_durations.add(scalar_formats[j]);
                 available_min_durations.add(gCamCapability[cameraId]->picture_sizes_tbl[i].width);
                 available_min_durations.add(gCamCapability[cameraId]->picture_sizes_tbl[i].height);
+
+                if ((scalar_formats[j] == HAL_PIXEL_FORMAT_YCbCr_420_888) &&
+                    (gCamCapability[cameraId]->picture_sizes_tbl[i].height
+                     == CTS_WA_HEIGHT_CHECK) &&
+                    (gCamCapability[cameraId]->picture_sizes_tbl[i].width == CTS_WA_WIDTH_CHECK)) {
+                    gCamCapability[cameraId]->picture_min_duration[i] = CTS_WA_MINFRAMEDURATION;
+
+                }
                 available_min_durations.add(gCamCapability[cameraId]->picture_min_duration[i]);
             }
             break;
@@ -17412,9 +17441,13 @@ void QCamera3HardwareInterface::setPAAFSupport(
     case CAM_FILTER_ARRANGEMENT_GRBG:
     case CAM_FILTER_ARRANGEMENT_GBRG:
     case CAM_FILTER_ARRANGEMENT_BGGR:
-        if ((stream_type == CAM_STREAM_TYPE_PREVIEW) ||
-                (stream_type == CAM_STREAM_TYPE_VIDEO)) {
+        if (stream_type == CAM_STREAM_TYPE_PREVIEW) {
             if (!(feature_mask & CAM_QTI_FEATURE_PPEISCORE))
+                feature_mask |= CAM_QCOM_FEATURE_PAAF;
+        }
+        else if (stream_type == CAM_STREAM_TYPE_VIDEO) {
+            if (!(feature_mask & CAM_QTI_FEATURE_PPEISCORE) &&
+                !(feature_mask & CAM_QTI_FEATURE_VENDOR_EIS))
                 feature_mask |= CAM_QCOM_FEATURE_PAAF;
         }
         break;

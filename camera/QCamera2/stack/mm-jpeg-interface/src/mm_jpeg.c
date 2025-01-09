@@ -2431,6 +2431,7 @@ int32_t mm_jpeg_init(mm_jpeg_obj *my_obj)
   }
 #endif
 
+
   return rc;
 }
 
@@ -2866,7 +2867,6 @@ int32_t mm_jpeg_start_job(mm_jpeg_obj *my_obj,
 
   memset(node, 0, sizeof(mm_jpeg_job_q_node_t));
   node->enc_info.encode_job = job->encode_job;
-
 #ifdef LIB2D_ROTATION_ENABLE
   if (my_obj->is_lib2d_enable) {
     if (p_session->lib2d_rotation_flag) {

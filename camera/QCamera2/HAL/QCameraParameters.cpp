@@ -7229,11 +7229,13 @@ int32_t QCameraParameters::setPreviewFpsRange(int min_fps,
     property_get("persist.vendor.debug.set.fixedfps", value, "0");
     fixedFpsValue = atoi(value);
 
-    // Don't allow function callers to request min fps same as max fps
-    // I mean SnapdragonCamera.
-    if (max_fps >= 24000 && min_fps == max_fps) {
-        LOGH("min_fps %d same as max_fps %d, setting min_fps to 7000", min_fps, max_fps);
-        min_fps = 7000;
+    // Workaround backend AEC bug that doesn't set high enough ISO values when the min FPS value
+    // is higher than expected, which resulted in a very dark preview in low light conditions
+    // while recording. The lowest FPS value AEC expects in such conditions is 19.99, so 15fps
+    // as the min FPS value should be sufficient.
+    if (!isHfrMode() && min_fps > 15000) {
+        LOGH("Original min_fps %d, changing min_fps to 15000", min_fps);
+        min_fps = 15000;
     }
 
     LOGD("E minFps = %d, maxFps = %d , vid minFps = %d, vid maxFps = %d",
@@ -12520,7 +12522,7 @@ int32_t QCameraParameters::setFrameSkip(enum msm_vfe_frame_skip_pattern pattern)
  *              none-zero failure code
  *==========================================================================*/
 int32_t QCameraParameters::getSensorOutputSize(cam_dimension_t max_dim,
-        cam_dimension_t &sensor_dim, uint32_t cam_type)
+        cam_sensor_config_t &sensor_dim, uint32_t cam_type)
 {
     int32_t rc = NO_ERROR;
     cam_dimension_t pic_dim;
@@ -12612,9 +12614,11 @@ int32_t QCameraParameters::getSensorOutputSize(cam_dimension_t max_dim,
     if (sensor_dim.width == 0 || sensor_dim.height == 0) {
         LOGW("Error getting RAW size. Setting to Capability value");
         if (getQuadraCfa()) {
-            sensor_dim = m_pCapability->quadra_cfa_dim[0];
+            sensor_dim.width = m_pCapability->quadra_cfa_dim[0].width;
+            sensor_dim.height = m_pCapability->quadra_cfa_dim[0].height;
         } else {
-            sensor_dim = m_pCapability->raw_dim[0];
+            sensor_dim.width = m_pCapability->raw_dim[0].width;
+            sensor_dim.height = m_pCapability->raw_dim[0].height;
         }
     }
     return rc;
@@ -12635,9 +12639,13 @@ int32_t QCameraParameters::getSensorOutputSize(cam_dimension_t max_dim,
 int32_t QCameraParameters::updateRAW(cam_dimension_t max_dim)
 {
     int32_t rc = NO_ERROR;
+    cam_sensor_config_t sensor_dim;
     cam_dimension_t raw_dim;
 
-    getSensorOutputSize(max_dim,raw_dim);
+    getSensorOutputSize(max_dim,sensor_dim);
+
+    raw_dim.width = sensor_dim.width;
+    raw_dim.height = sensor_dim.height;
     setRawSize(raw_dim);
     return rc;
 }
@@ -14237,7 +14245,8 @@ int32_t QCameraParameters::setISType()
     bool eisSupported = false, eis3Supported = false;
     for (size_t i = 0; i < m_pCapability->supported_is_types_cnt; i++) {
         if ((m_pCapability->supported_is_types[i] == IS_TYPE_EIS_2_0) ||
-                (m_pCapability->supported_is_types[i] == IS_TYPE_EIS_3_0)) {
+                (m_pCapability->supported_is_types[i] == IS_TYPE_EIS_3_0) ||
+                (m_pCapability->supported_is_types[i] == IS_TYPE_VENDOR_EIS)) {
             eisSupported = true;
         }
         if (m_pCapability->supported_is_types[i] == IS_TYPE_EIS_3_0) {
@@ -14325,7 +14334,8 @@ int32_t QCameraParameters::updateSnapshotPpMask(cam_stream_size_info_t &stream_c
 
 {
     int32_t rc = NO_ERROR;
-    cam_dimension_t sensor_dim, snap_dim;
+    cam_dimension_t snap_dim, raw_dim;
+    cam_sensor_config_t sensor_dim;
     cam_dimension_t max_dim = {0,0};
 
     // Find the Maximum dimension among all the streams
@@ -14339,8 +14349,10 @@ int32_t QCameraParameters::updateSnapshotPpMask(cam_stream_size_info_t &stream_c
     }
     LOGH("Max Dimension = %d X %d", max_dim.width, max_dim.height);
     getSensorOutputSize(max_dim,sensor_dim);
+    raw_dim.width = sensor_dim.width;
+    raw_dim.height = sensor_dim.height;
     getStreamDimension(CAM_STREAM_TYPE_SNAPSHOT, snap_dim);
-    setSmallJpegSize(sensor_dim,snap_dim);
+    setSmallJpegSize(raw_dim,snap_dim);
 
     //Picture ratio is greater than VFE downscale factor.So, link CPP
     if ( isSmallJpegSizeEnabled() ) {
@@ -14427,8 +14439,8 @@ uint8_t QCameraParameters::getMobicatMask()
  *==========================================================================*/
 bool QCameraParameters::sendStreamConfigInfo(cam_stream_size_info_t &stream_config_info) {
     int32_t rc = NO_ERROR;
-    cam_dimension_t sensor_dim_main = {0,0};
-    cam_dimension_t sensor_dim_aux  = {0,0};
+    cam_sensor_config_t sensor_dim_main = {0,0,0};
+    cam_sensor_config_t sensor_dim_aux  = {0,0,0};
 
     if (isDualCamera()) {
         // Get the sensor output dimensions for main and aux cameras.
@@ -15379,7 +15391,8 @@ int32_t QCameraParameters::updatePpFeatureMask(cam_stream_type_t stream_type) {
                 (stream_type == CAM_STREAM_TYPE_PREVIEW)) {
             needPAAF = true;
         } else if (stream_type == CAM_STREAM_TYPE_VIDEO) {
-            if (getVideoISType() != IS_TYPE_EIS_3_0) {
+            if ((getVideoISType() != IS_TYPE_EIS_3_0) &&
+                (getVideoISType() != IS_TYPE_VENDOR_EIS)) {
                 needPAAF = true;
             }
         }
@@ -15400,9 +15413,16 @@ int32_t QCameraParameters::updatePpFeatureMask(cam_stream_type_t stream_type) {
     }
 
     // Enable PPEISCORE for EIS 3.0
-    if ((stream_type == CAM_STREAM_TYPE_VIDEO) &&
-            (getVideoISType() == IS_TYPE_EIS_3_0)) {
+    if (stream_type == CAM_STREAM_TYPE_VIDEO) {
+        if (getVideoISType() == IS_TYPE_EIS_3_0)
         feature_mask |= CAM_QTI_FEATURE_PPEISCORE;
+        else if (getVideoISType() == IS_TYPE_VENDOR_EIS)
+          feature_mask |= CAM_QTI_FEATURE_VENDOR_EIS;
+    }
+
+    if ((stream_type == CAM_STREAM_TYPE_PREVIEW) &&
+            (getPreviewISType() == IS_TYPE_VENDOR_EIS)) {
+          feature_mask |= CAM_QTI_FEATURE_VENDOR_EIS;
     }
 
     if(isDualCamera()) {

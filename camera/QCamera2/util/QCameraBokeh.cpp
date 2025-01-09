@@ -699,8 +699,8 @@ int32_t QCameraBokeh::doBokehProcess(
             auxiliaryStrideY, auxiliaryStrideVU,
             pDepthMap, depthStride,
             goodRoi.left, goodRoi.top, goodRoi.width,goodRoi.height,
-            inParams.sMainReprocessInfo.string(), inParams.sAuxReprocessInfo.string(),
-            inParams.sCalibData.string(), focalLengthPrimaryCamera, config, ddmMode);
+            inParams.sMainReprocessInfo.c_str(), inParams.sAuxReprocessInfo.c_str(),
+            inParams.sCalibData.c_str(), focalLengthPrimaryCamera, config, ddmMode);
 
     if (!status.ok()) {
         LOGE("depth map generation failed: %s, errorcode %d",

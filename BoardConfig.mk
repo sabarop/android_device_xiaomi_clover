@@ -11,12 +11,10 @@ include device/xiaomi/sdm660-common/BoardConfigCommon.mk
 DEVICE_PATH := device/xiaomi/clover
 
 # Camera
-TARGET_TS_MAKEUP := true
-TARGET_USES_QTI_CAMERA_DEVICE := true
 BOARD_QTI_CAMERA_32BIT_ONLY := true
-MALLOC_SVELTE_FOR_LIBC32 := true
+TARGET_SUPPORT_HAL1 := false
+TARGET_TS_MAKEUP := true
 USE_DEVICE_SPECIFIC_CAMERA := true
-$(call project-set-path,qcom-camera,$(DEVICE_PATH)/camera)
 
 # DT2W
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchscreen/enable_dt2w"
