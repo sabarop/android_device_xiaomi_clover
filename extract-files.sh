@@ -20,6 +20,11 @@ function blob_fixup() {
            "${PATCHELF}" --remove-needed "libhidltransport.so" "${2}"
            "${PATCHELF}" --replace-needed "libhidlbase.so" "libhidlbase-v32.so" "${2}"
             ;;
+    case "${1}" in
+        vendor/lib64/hw/fingerprint.fpc.so)
+            [ "$2" = "" ] && return 0
+           "${PATCHELF}" --set-soname "fingerprint.fpc.so" "fingerprint.fpc.default.so" "${2}"
+            ;;
         *)
             return 1
             ;;
