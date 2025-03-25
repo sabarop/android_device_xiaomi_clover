@@ -87,5 +87,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/window_extensions.mk)
 PRODUCT_PACKAGES += \
     CloverWifiOverlay
 
+# WiFi Firmware Symlinks
+PRODUCT_PACKAGES += \
+    firmware_wlan_mac.clover_symlink
+
 # Vendor files
 $(call inherit-product, vendor/xiaomi/clover/clover-vendor.mk)
