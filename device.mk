@@ -91,9 +91,14 @@ PRODUCT_PACKAGES += \
 # Vendor files
 $(call inherit-product, vendor/xiaomi/clover/clover-vendor.mk)
 
+# WiFi Firmware Symlinks
+PRODUCT_PACKAGES += \
+    firmware_wlan_mac.clover_symlink
+
 # AOSP DEVICE
 PRODUCT_NAME := aosp_clover
 PRODUCT_DEVICE := clover
 PRODUCT_MODEL := Mi PAD 4 (AOSP)
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MANUFACTURER := Xiaomi
+
