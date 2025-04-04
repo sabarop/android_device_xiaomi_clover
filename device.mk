@@ -52,6 +52,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 PRODUCT_PACKAGES += \
     CloverApertureOverlay \
     CloverFrameworksOverlay \
+    CloverSettingsOverlay \
     CloverSystemUIOverlay \
     CloverTenInchFrameworksPowerOverlay
 
