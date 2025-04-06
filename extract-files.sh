@@ -15,11 +15,6 @@ function blob_fixup() {
             [ "$2" = "" ] && return 0
            "${PATCHELF}" --remove-needed "libgui" "${2}"
             ;;
-        vendor/lib64/vendor.qti.hardware.fingerprint@1.0.so)
-            [ "$2" = "" ] && return 0
-           "${PATCHELF}" --remove-needed "libhidltransport.so" "${2}"
-           "${PATCHELF}" --replace-needed "libhidlbase.so" "libhidlbase-v32.so" "${2}"
-            ;;
     case "${1}" in
         vendor/lib64/hw/fingerprint.fpc.so)
             [ "$2" = "" ] && return 0
