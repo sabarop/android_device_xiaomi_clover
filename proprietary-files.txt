@@ -30,12 +30,10 @@ vendor/etc/camera/ov13855_f13v10l_chromatix.xml
 vendor/etc/camera/s5k3p8sp_chromatix.xml
 vendor/etc/camera/s5k5e8_chromatix.xml
 vendor/etc/camera/sdm_ys_32p_120_21_5_perturb50.bin
-vendor/lib/lib_lowlight.so
 vendor/lib/libarcsoft_beautyshot.so
 vendor/lib/libarcsoft_high_dynamic_range.so
 vendor/lib/libdepthmapwrapper.so
 vendor/lib/libdualcameraddm.so
-vendor/lib/libFaceGrade.so
 vendor/lib/libflash_pmic.so
 vendor/lib/libjpegdhw.so
 vendor/lib/libjpegdmahw.so
@@ -219,6 +217,11 @@ vendor/lib/libchromatix_s5k5e8_preview_video_call.so
 vendor/lib/libchromatix_s5k5e8_snapshot_video_call.so
 vendor/lib/libchromatix_s5k5e8_cpp_snapshot_4m_video_call.so
 
+# Camera - from lavender
+vendor/lib/libFaceGrade.so
+vendor/lib/libXMFD_AgeGender.so
+vendor/lib/lib_lowlight.so
+
 # Camera firmware
 vendor/firmware/cpp_firmware_v1_1_1.fw
 vendor/firmware/cpp_firmware_v1_1_6.fw
@@ -231,6 +234,9 @@ vendor/firmware/cpp_firmware_v1_5_1.fw
 vendor/firmware/cpp_firmware_v1_5_2.fw
 vendor/firmware/cpp_firmware_v1_6_0.fw
 vendor/firmware/cpp_firmware_v1_8_0.fw
+
+# Camera firmware - from lavender
+vendor/firmware/cpp_firmware_v1_12_1.fw
 
 # Camera OIS
 vendor/lib/libois_bu63165.so
@@ -285,7 +291,6 @@ vendor/lib/libmmcamera_isp_scaler_viewfinder46.so
 vendor/lib/libmmcamera_isp_sce40.so
 vendor/lib/libmmcamera_isp_snr47.so
 vendor/lib/libmmcamera_isp_sub_module.so
-vendor/lib/libXMFD_AgeGender.so
 
 # Display calibration
 vendor/etc/qdcm_calib_data_NT51021_BOE_BOE.xml
