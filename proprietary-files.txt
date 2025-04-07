@@ -307,7 +307,7 @@ vendor/etc/qdcm_calib_data_NT51021_BOE_BOE.xml
 vendor/etc/qdcm_calib_data_NT51021_BOE_BOE10.xml
 
 # Fingerprint sensor
-vendor/lib64/hw/fingerprint.fpc.so:vendor/lib64/hw/fingerprint.fpc.default.so;FIX_SONAME|1425850a467ce954a3530130ed9979442b7ac461
+vendor/lib64/hw/fingerprint.fpc.so:vendor/lib64/hw/fingerprint.fpc.default.so;FIX_SONAME|58d4c5924621e22d8a49ec9a80f8ab4b248e12c5
 
 # Keymaster - from Honeywell/hon660/hon660:12/94.00.03/0037:user/release-keys
 vendor/etc/init/android.hardware.keymaster@3.0-service-qti.rc|573b7392c8997008204081165cfe81a11080745d
