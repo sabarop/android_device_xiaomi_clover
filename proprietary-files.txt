@@ -296,6 +296,9 @@ vendor/lib/libmmcamera_isp_sub_module.so
 vendor/etc/qdcm_calib_data_NT51021_BOE_BOE.xml
 vendor/etc/qdcm_calib_data_NT51021_BOE_BOE10.xml
 
+# Display Firmware - from clover
+vendor/etc/goodix_firmware.bin
+
 # Fingerprint sensor
 vendor/lib64/hw/fingerprint.fpc.so:vendor/lib64/hw/fingerprint.fpc.default.so;FIX_SONAME|58d4c5924621e22d8a49ec9a80f8ab4b248e12c5
 
