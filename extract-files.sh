@@ -7,15 +7,15 @@
 
 function blob_fixup() {
     case "${1}" in
-        vendor/lib/libmmcamera_bokeh.so.so)
+        vendor/lib/libmmcamera_bokeh.so | vendor/lib/libmmcamera_ppeiscore.so)
             [ "$2" = "" ] && return 0
-           "${PATCHELF}" --remove-needed "libandroid" "${2}"
-            ;;
-        vendor/lib/libmmcamera_bokeh.so.so)
-            [ "$2" = "" ] && return 0
-           "${PATCHELF}" --remove-needed "libgui" "${2}"
+            "${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${2}"
             ;;
     case "${1}" in
+        vendor/lib/libFaceGrade.so | vendor/lib/libXMFD_AgeGender.so | vendor/lib/lib_lowlight.so | vendor/lib/libarcsoft_beautyshot.so | vendor/lib/libdualcameraddm.so | vendor/lib/libmmcamera_hdr_gb_lib.so |vendor/lib/libts_detected_face_hal.so | vendor/lib/libts_face_beautify_hal.so | vendor/lib/libvideobokeh.so)
+            [ "$2" = "" ] && return 0
+           "${PATCHELF}" --replace-needed "libstdc++.so" "libstdc++_vendor.so" "${2}"
+            ;;
         vendor/lib64/hw/fingerprint.fpc.so)
             [ "$2" = "" ] && return 0
            "${PATCHELF}" --set-soname "fingerprint.fpc.so" "fingerprint.fpc.default.so" "${2}"
