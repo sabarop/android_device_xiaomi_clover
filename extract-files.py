@@ -1,0 +1,62 @@
+#!/usr/bin/env -S PYTHONPATH=../../../tools/extract-utils python3
+#
+# SPDX-FileCopyrightText: 2024 The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
+#
+
+from extract_utils.fixups_blob import (
+    blob_fixup,
+    blob_fixups_user_type,
+)
+from extract_utils.fixups_lib import (
+    lib_fixups,
+    lib_fixups_user_type,
+)
+from extract_utils.main import (
+    ExtractUtils,
+    ExtractUtilsModule,
+)
+
+namespace_imports = [
+    'hardware/qcom-caf/sdm660',
+    'hardware/xiaomi',
+    'vendor/xiaomi/clover',
+    'vendor/xiaomi/sdm660-common',
+    'vendor/qcom/opensource/display',
+]
+
+def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
+    return f'{lib}_{partition}' if partition == 'vendor' else None
+
+lib_fixups: lib_fixups_user_type = {
+    **lib_fixups,
+    (
+    ): lib_fixup_vendor_suffix,
+}
+
+blob_fixups: blob_fixups_user_type = {
+    'vendor/lib/libmmcamera_bokeh.so.so': blob_fixup()
+        .remove_needed('libandroid.so')
+        .remove_needed('libgui.so'),
+    'vendor/lib64/vendor.qti.hardware.fingerprint@1.0.so': blob_fixup()
+        .remove_needed('libhidltransport.so')
+        .replace_needed('libhidlbase.so', 'libhidlbase-v32.so'),
+    'vendor/lib64/hw/fingerprint.fpc.so': blob_fixup()
+        .fix_soname(),
+    'vendor/lib/libmmcamera_faceproc.so': blob_fixup()
+        .clear_symbol_version('__aeabi_memcpy')
+        .clear_symbol_version('__aeabi_memset')
+        .clear_symbol_version('__gnu_Unwind_Find_exidx'),
+}  # fmt: skip
+
+module = ExtractUtilsModule(
+    'sdm660-common',
+    'xiaomi',
+    blob_fixups=blob_fixups,
+    lib_fixups=lib_fixups,
+    namespace_imports=namespace_imports,
+)
+
+if __name__ == '__main__':
+    utils = ExtractUtils.device(module)
+    utils.run()
