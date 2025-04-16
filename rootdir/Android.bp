@@ -1,0 +1,22 @@
+//
+// SPDX-FileCopyrightText: 2024 The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+// Init scripts
+
+sh_binary {
+    name: "init.macaddress_setup.sh",
+    src: "bin/init.macaddress_setup.sh",
+    vendor: true,
+}
+
+// Init configuration files
+
+prebuilt_etc {
+    name: "init.device.rc",
+    src: "etc/init.device.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
