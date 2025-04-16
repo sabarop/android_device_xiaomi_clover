@@ -24,6 +24,7 @@
 # Inherit some common PixelOS stuff
 $(call inherit-product, vendor/aosp/config/common_full_tablet.mk)
 TARGET_BOOT_ANIMATION_RES := 1440
+TARGET_SCREEN_WIDTH := 1440
 
 # Inherit device configuration
 $(call inherit-product, device/xiaomi/clover/device.mk)
