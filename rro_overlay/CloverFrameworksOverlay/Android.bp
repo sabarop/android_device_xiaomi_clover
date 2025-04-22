@@ -16,6 +16,5 @@
 
 runtime_resource_overlay {
     name: "CloverFrameworksOverlay",
-    resource_dirs: ["res"],
     vendor: true,
 }
