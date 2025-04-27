@@ -12,5 +12,3 @@ persist.vendor.camera.stats.test=5
 debug.vds.allow_hwc=0
 
 persist.radio.multisim.config=ssss
-
-persist.vendor.fingerprint.type=home
