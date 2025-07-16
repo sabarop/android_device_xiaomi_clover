@@ -53,6 +53,7 @@ on property:ro.vendor.radio.noril=yes
 
 on property:ro.board.variant=d9
 	mount none /dev/null /vendor/overlay/CloverTenInchFrameworksPowerOverlay.apk bind
+	mount none /dev/null /vendor/overlay/CloverTenInchSettingsOverlay.apk bind
 
 # Set max charge current
 on property:sys.incall=true
