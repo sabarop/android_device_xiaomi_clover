@@ -64,6 +64,15 @@ on property:sys.incall=false
 on post-fs
     wait_for_prop vendor.sys.listeners.registered true
 
+    mkdir /persist/qti_fp 0700 system system
+    mkdir /mnt/vendor/persist/fpc 0770 system system	
+
+    #Create directories for Fingerprint
+    mkdir /data/vendor/misc/qti_fp 0770 system system
+    mkdir /data/vendor/misc/qti_fp/bg_estimation 0770 system system
+    mkdir /data/vendor/misc/qti_fp/calib_test 0770 system system
+    mkdir /data/vendor/misc/qti_fp/database 0770 system system
+
 on boot
 	start macaddress_setup
 
