@@ -45,6 +45,9 @@ PRODUCT_PACKAGES += \
 # FM
 BOARD_HAVE_QCOM_FM := false
 
+# Fingerprint
+$(call soong_config_set,xiaomi_sdm660_biometrics,use_old_impl,true)
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(DEVICE_PATH)/overlay
