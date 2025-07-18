@@ -30,6 +30,7 @@ TARGET_SYSTEM_PROP += $(DEVICE_PATH)/properties/system.prop
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/properties/vendor.prop
 
 # Fingerprint
+$(call soong_config_set,xiaomi_sdm660_biometrics,use_old_impl,true)
 PRODUCT_PACKAGES += \
     com.fingerprints.extension@1.0.vendor
 
