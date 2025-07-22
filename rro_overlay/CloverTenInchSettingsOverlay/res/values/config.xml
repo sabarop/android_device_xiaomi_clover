@@ -15,4 +15,5 @@
     <!-- Indicates whether device has a front facing fingerprint sensor (not udfps). -->
     <bool name="config_is_front_facing_fps" translatable="false">true</bool>
 
+    <item name="fingerprint_sensor_location_fraction_y" type="fraction">73.91%</item>
 </resources>
