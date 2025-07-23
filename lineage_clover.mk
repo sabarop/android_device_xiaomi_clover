@@ -7,6 +7,7 @@
 # Inherit some common Evolution-X stuff
 $(call inherit-product, vendor/lineage/config/common_full_tablet.mk)
 TARGET_BOOT_ANIMATION_RES := 1440
+TARGET_HAS_UDFPS := false
 TARGET_INCLUDE_ACCORD = false
 TARGET_SCREEN_WIDTH := 1440
 TARGET_BUILD_DEVICE_AS_WEBCAM := true
