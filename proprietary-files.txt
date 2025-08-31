@@ -71,6 +71,7 @@ vendor/lib/libmmcamera2_stats_algorithm.so;DISABLE_CHECKELF
 vendor/lib/libmmcamera2_stats_lib.so;DISABLE_CHECKELF
 vendor/lib/libmmcamera2_stats_modules.so;DISABLE_CHECKELF
 vendor/lib/libmmcamera_chromaflash_lib.so
+vendor/lib/libmmcamera_dbg.so
 vendor/lib/libmmcamera_dummyalgo.so
 vendor/lib/libmmcamera_eebinparse.so
 vendor/lib/libmmcamera_eeprom_util.so
@@ -132,6 +133,7 @@ vendor/lib/libvideoutils.so
 vendor/lib64/libchromaflash.so;DISABLE_CHECKELF
 vendor/lib64/libdualcameraddm.so;DISABLE_CHECKELF
 vendor/lib64/libmmcamera2_frame_algorithm.so
+vendor/lib64/libmmcamera_dbg.so
 vendor/lib64/libmmcamera2_is.so;DISABLE_CHECKELF
 vendor/lib64/libmmcamera2_q3a_core.so;DISABLE_CHECKELF
 vendor/lib64/libmmcamera2_stats_algorithm.so;DISABLE_CHECKELF
