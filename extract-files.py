@@ -19,14 +19,17 @@ from extract_utils.main import (
 )
 
 namespace_imports = [
-    'vendor/xiaomi/sdm660-common',
     'device/xiaomi/sdm660-common',
     'hardware/qcom-caf/common/libqti-perfd-client',
-    'hardware/qcom-caf/msm8998',
+    'hardware/qcom-caf/sdm660',
     'hardware/qcom-caf/wlan',
     'hardware/xiaomi',
+    'vendor/qcom/opensource/commonsys/display',
+    'vendor/qcom/opensource/commonsys-intf/display',
     'vendor/qcom/opensource/data-ipa-cfg-mgr-legacy-um',
     'vendor/qcom/opensource/dataservices',
+    'vendor/qcom/opensource/display',
+    'vendor/xiaomi/sdm660-common',
 ]
 
 lib_fixups: lib_fixups_user_type = {
