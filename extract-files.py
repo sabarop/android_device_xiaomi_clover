@@ -18,11 +18,17 @@ from extract_utils.main import (
 )
 
 namespace_imports = [
+    'device/xiaomi/sdm660-common',
+    'hardware/qcom-caf/common/libqti-perfd-client',
     'hardware/qcom-caf/sdm660',
+    'hardware/qcom-caf/wlan',
     'hardware/xiaomi',
-    'vendor/xiaomi/clover',
-    'vendor/xiaomi/sdm660-common',
+    'vendor/qcom/opensource/commonsys/display',
+    'vendor/qcom/opensource/commonsys-intf/display',
+    'vendor/qcom/opensource/data-ipa-cfg-mgr-legacy-um',
+    'vendor/qcom/opensource/dataservices',
     'vendor/qcom/opensource/display',
+    'vendor/xiaomi/sdm660-common',
 ]
 
 def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
@@ -50,7 +56,7 @@ blob_fixups: blob_fixups_user_type = {
 }  # fmt: skip
 
 module = ExtractUtilsModule(
-    'sdm660-common',
+    'clover',
     'xiaomi',
     blob_fixups=blob_fixups,
     lib_fixups=lib_fixups,
@@ -58,5 +64,7 @@ module = ExtractUtilsModule(
 )
 
 if __name__ == '__main__':
-    utils = ExtractUtils.device(module)
+    utils = ExtractUtils.device_with_common(
+        module, 'sdm660-common', module.vendor
+    )
     utils.run()
