@@ -22,9 +22,6 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 # Display
 TARGET_SCREEN_DENSITY := 320
 
-# DT2W
-TARGET_TAP_TO_WAKE_NODE := "/proc/touchscreen/enable_dt2w"
-
 # Kernel
 BOARD_KERNEL_CMDLINE += androidboot.boot_devices=soc/c0c4000.sdhci
 TARGET_KERNEL_CONFIG := clover_defconfig
