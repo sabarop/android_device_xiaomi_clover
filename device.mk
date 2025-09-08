@@ -38,6 +38,10 @@ PRODUCT_COPY_FILES += \
 # Consumerir
 BOARD_HAVE_IR := false
 
+# Camera
+PRODUCT_PACKAGES += \
+    camera.sdm660
+
 # FM
 BOARD_HAVE_QCOM_FM := false
 

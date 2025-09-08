@@ -37,10 +37,6 @@ lib_fixups: lib_fixups_user_type = {
 
 blob_fixups: blob_fixups_user_type = {
     (
-        'vendor/lib/hw/camera.sdm660.so',
-    ): blob_fixup()
-        .add_needed('libcamera_sdm660_shim.so'),
-    (
         'vendor/lib/libFaceGrade.so',
     ): blob_fixup()
         .remove_needed('libandroid.so')
