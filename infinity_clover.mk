@@ -6,11 +6,23 @@
 
 $(call inherit-product, device/xiaomi/clover/device.mk)
 
-# Inherit some common Lineage stuff
-$(call inherit-product, vendor/lineage/config/common_full_tablet.mk)
+# Inherit some common Infinity-X stuff
+$(call inherit-product, vendor/infinity/config/common_full_tablet.mk)
+INFINITY_BUILD_TYPE := UNOFFICIAL
+WITH_GAPPS := true
+INFINITY_MAINTAINER := SABAR
+
+TARGET_BOOT_ANIMATION_RES := 1080
+TARGET_HAS_UDFPS := false
+TARGET_SCREEN_WIDTH := 1080
+TARGET_BUILD_DEVICE_AS_WEBCAM := false
+TARGET_SUPPORTS_BLUR := true
+TARGET_FACE_UNLOCK_SUPPORTED := true
+TARGET_SUPPORTS_QUICK_TAP := false
+TARGET_DISABLE_EPPE := false
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := lineage_clover
+PRODUCT_NAME := infinity_clover
 PRODUCT_DEVICE := clover
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := Mi PAD 4
