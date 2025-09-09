@@ -62,6 +62,10 @@ PRODUCT_PACKAGES += \
     init.device.rc \
     init.macaddress_setup.sh
 
+# Screen density
+PRODUCT_AAPT_CONFIG := large
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
+
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH)
