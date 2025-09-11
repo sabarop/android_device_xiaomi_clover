@@ -35,6 +35,10 @@ PRODUCT_COPY_FILES += \
     system/core/libprocessgroup/profiles/cgroups_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
     system/core/libprocessgroup/profiles/task_profiles_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
+# Camera
+PRODUCT_PACKAGES += \
+    libstdc++_vendor
+
 # Consumerir
 BOARD_HAVE_IR := false
 
@@ -47,6 +51,8 @@ BOARD_HAVE_QCOM_FM := false
 
 # Fingerprint
 $(call soong_config_set,xiaomi_sdm660_biometrics,use_old_impl,true)
+PRODUCT_PACKAGES += \
+    com.fingerprints.extension@1.0.vendor
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
