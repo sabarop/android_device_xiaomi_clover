@@ -36,6 +36,9 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/properties/vendor.prop
 
 # Fingerprint
 PRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
+    android.hardware.biometrics.fingerprint@2.3-service.xiaomi_sdm660 \
+    android.hardware.biometrics.fingerprint@2.3.vendor \
     com.fingerprints.extension@1.0.vendor
 
 # Folio
